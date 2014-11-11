@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+# fail fast
+set -e
+set -o pipefail
+
+BIN_DIR=$(cd $(dirname $0) && pwd) # absolute path
+
+. $BIN_DIR/../lib/utils
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
+status "Compiling search lexer"
+$BUILD_DIR/.heroku/vendor/bin/ragel -R $BUILD_DIR/lib/search_lexer.rl -o $BUILD_DIR/app/models/search_lexer.rb
+
+status "Generating search parser"
+install_gems $CACHE_DIR racc
+racc $BUILD_DIR/lib/search_parser.y -o $BUILD_DIR/app/models/search_parser.rb
