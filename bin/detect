@@ -1,0 +1,6 @@
+if [ -f $1/lib/search_lexer.rl -a -f $1/lib/search_parser.y ]; then
+  echo "Running Skyline Buildpack"
+  exit 0
+else
+  exit 1
+fi
